@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "aiohttp>=3.12.14",
+    "aiosqlite>=0.21.0",
     "fastapi>=0.116.1",
     "gspread-asyncio>=2.0.0",
     "loguru>=0.7.3",

@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
     # Тут токены для api внешних и бота
 
-    SQLITE_DB_PATH: str = "sqlite:///./clients.db"
+    SQLITE_DB_PATH: str = "sqlite+aiosqlite:///./clients.db"
 
     @property
     def DB_URL(self) -> str:
