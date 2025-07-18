@@ -1,12 +1,13 @@
 import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import SecretStr
 
 
 class Settings(BaseSettings):
     BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
     # Тут токены для api внешних и бота
-
+    SENTIMENT_TOKEN: SecretStr
     SQLITE_DB_PATH: str = "sqlite+aiosqlite:///./clients.db"
 
     @property

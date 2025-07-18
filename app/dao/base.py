@@ -1,9 +1,6 @@
 from typing import Generic, List, Type, TypeVar
-
 from loguru import logger
 from pydantic import BaseModel
-from sqlalchemy import delete as sqlalchemy_delete
-from sqlalchemy import func
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -82,4 +79,26 @@ class BaseDAO(Generic[T]):
             return new_instance
         except SQLAlchemyError as e:
             logger.error(f"Ошибка при добавлении записи: {e}")
+            raise
+
+    async def update(self, filters: BaseModel, values: BaseModel):
+        filter_dict = filters.model_dump(exclude_unset=True)
+        values_dict = values.model_dump(exclude_unset=True)
+        logger.info(
+            f"Обновление записей {self.model.__name__} по фильтру: "
+            f"{filter_dict} с параметрами: {values_dict}"
+        )
+        try:
+            query = (
+                sqlalchemy_update(self.model)
+                .where(*[getattr(self.model, k) == v for k, v in filter_dict.items()])
+                .values(**values_dict)
+                .execution_options(synchronize_session="fetch")
+            )
+            result = await self._session.execute(query)
+            logger.info(f"Обновлено {result.rowcount} записей.")
+            await self._session.flush()
+            return result.rowcount
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка при обновлении записей: {e}")
             raise
