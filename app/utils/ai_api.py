@@ -1,10 +1,9 @@
-import asyncio
 from openai import DefaultAioHttpClient
 from openai import AsyncOpenAI
 from app.config import Settings
 
 
-async def main() -> None:
+async def get_chatgpt_response(text: str) -> str:
     async with AsyncOpenAI(
             api_key="My API Key",
             http_client=DefaultAioHttpClient(),
@@ -18,3 +17,4 @@ async def main() -> None:
             ],
             model="gpt-4o",
         )
+        return chat_completion.choices[0].message.content
