@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dao.dao import ComplaintsDAO
+from app.utils.external_api import analyze_sentiment
 from typing import Union
 from app.dependencies.dao_dep import (
     get_session_with_commit,
@@ -15,7 +16,7 @@ router = APIRouter(tags=["Customers complaints"])
 async def create_appointment(
         complaint: ComplaintPost,
         session: AsyncSession = Depends(get_session_with_commit),):
-    pass
+    sentiment = await analyze_sentiment(complaint.text)
     # added_complaint = await ComplaintsDAO(session=session).add(complaint)
     # if added_complaint.category == 'другое':
     #    return ComplaintBaseResponse()
