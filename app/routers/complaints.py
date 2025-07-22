@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dao.dao import ComplaintsDAO
 from app.utils.external_api import analyze_sentiment
 from app.utils.ai_api import get_chatgpt_response
-from typing import Union, reveal_type
+from typing import Union
 from app.dependencies.dao_dep import (
     get_session_with_commit,
 )

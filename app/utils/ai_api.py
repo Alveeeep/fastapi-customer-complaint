@@ -1,12 +1,12 @@
 from openai import DefaultAioHttpClient
 from openai import AsyncOpenAI
-from app.config import Settings
+from app.config import settings
 
 
 async def get_chatgpt_response(text: str) -> str:
     async with AsyncOpenAI(
-            api_key=Settings.OPENAI_TOKEN.get_secret_value(),
-            http_client=DefaultAioHttpClient(proxy=Settings.PROXY_URL.get_secret_value()),
+            api_key=settings.OPENAI_TOKEN.get_secret_value(),
+            http_client=DefaultAioHttpClient(proxy=settings.PROXY_URL.get_secret_value()),
     ) as client:
         try:
             chat_completion = await client.chat.completions.create(

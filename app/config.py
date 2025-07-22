@@ -6,7 +6,7 @@ from pydantic import SecretStr
 class Settings(BaseSettings):
     BASE_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     PROXY_URL: SecretStr
-    # Тут токены для api внешних и бота
+    # Тут токены для api внешних
     SENTIMENT_TOKEN: SecretStr
     OPENAI_TOKEN: SecretStr
     SQLITE_DB_PATH: str = "sqlite+aiosqlite:///./clients.db"

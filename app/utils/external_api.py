@@ -1,12 +1,12 @@
 import aiohttp
 import json
-from app.config import Settings
+from app.config import settings
 from fastapi import HTTPException, status
 
 
 async def analyze_sentiment(text: str) -> str:
     url = "https://api.apilayer.com/sentiment/analysis"
-    headers = {"apikey": Settings.SENTIMENT_TOKEN.get_secret_value()}
+    headers = {"apikey": settings.SENTIMENT_TOKEN.get_secret_value()}
 
     async with aiohttp.ClientSession() as session:
         async with session.post(url, headers=headers, data=text.encode("utf-8")) as response:
