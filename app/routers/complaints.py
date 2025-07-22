@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dao.dao import ComplaintsDAO
+from app.models.complaints import Complaint
 from app.utils.external_api import analyze_sentiment
 from app.utils.ai_api import get_chatgpt_response
 from typing import Union, reveal_type
@@ -16,7 +17,7 @@ router = APIRouter(tags=["Customers complaints"])
 @router.post("/complaint", response_model=Union[ComplaintFullResponse, ComplaintBaseResponse])
 async def create_appointment(
         complaint: ComplaintPost,
-        session: AsyncSession = Depends(get_session_with_commit), ):
+        session: AsyncSession = Depends(get_session_with_commit)):
     sentiment = await analyze_sentiment(complaint.text)
     data = {'text': complaint.text, 'sentiment': sentiment}
     complaint_to_add = ComplaintCreate(**data)
@@ -28,4 +29,9 @@ async def create_appointment(
         return ComplaintFullResponse.model_validate(added_complaint)
     else:
         return ComplaintBaseResponse.model_validate(added_complaint)
+
+@router.get("/complaint-full-info", response_model=ComplaintDTO)
+async def get_full_info_complaint(id: int, session: AsyncSession = Depends(get_session_with_commit)):
+    res = await ComplaintsDAO(session=session).find_one_or_none_by_id(id)
+    return ComplaintDTO.model_validate(res)
 
