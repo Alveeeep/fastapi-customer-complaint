@@ -1,0 +1,23 @@
+## Настройка n8n
+- Изменить создать .env файл в папке n8n-compose
+```
+# DOMAIN_NAME and SUBDOMAIN together determine where n8n will be reachable from
+# The top level domain to serve from
+DOMAIN_NAME=example.com
+
+# The subdomain to serve from
+SUBDOMAIN=n8n
+
+# The above example serve n8n at: https://n8n.example.com
+
+# Optional timezone to set which gets used by Cron and other scheduling nodes
+# New York is the default value if not set
+GENERIC_TIMEZONE=Europe/Berlin
+
+# The email address to use for the TLS/SSL certificate creation
+SSL_EMAIL=user@example.com
+```
+- Создать директорию на сервере или локальном компьютере
+```shell
+mkdir local-files
+```

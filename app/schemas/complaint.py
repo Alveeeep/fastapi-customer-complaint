@@ -22,8 +22,11 @@ class ComplaintCreate(ComplaintBaseResponse, ComplaintPost):
 class ComplaintUpdateFilter(BaseModel):
     id: int
 
+
 class ComplaintUpdateValue(BaseModel):
-    category: str
+    category: str | None = None
+    status: str | None = None
+
 
 class ComplaintDTO(ComplaintCreate):
     id: int

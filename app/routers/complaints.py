@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dao.dao import ComplaintsDAO
-from app.models.complaints import Complaint
 from app.utils.external_api import analyze_sentiment
 from app.utils.ai_api import get_chatgpt_response
 from typing import Union, reveal_type
@@ -25,13 +24,25 @@ async def create_appointment(
     category = await get_chatgpt_response(complaint.text)
     if category != 'другое':
         added_complaint = await ComplaintsDAO(session=session).update(ComplaintUpdateFilter(id=added_complaint.id),
-                                                    ComplaintUpdateValue(category=category))
+                                                                      ComplaintUpdateValue(category=category))
         return ComplaintFullResponse.model_validate(added_complaint)
     else:
         return ComplaintBaseResponse.model_validate(added_complaint)
 
-@router.get("/complaint-full-info", response_model=ComplaintDTO)
+
+@router.get("/complaint-full-info/{id}", response_model=ComplaintDTO)
 async def get_full_info_complaint(id: int, session: AsyncSession = Depends(get_session_with_commit)):
     res = await ComplaintsDAO(session=session).find_one_or_none_by_id(id)
     return ComplaintDTO.model_validate(res)
 
+
+@router.get("/complaint-open-last-hour", response_model=ComplaintDTO)
+async def get_complaint_open_last_hour(session: AsyncSession = Depends(get_session_with_commit)):
+    res = await ComplaintsDAO(session=session).find_last_hour_open()
+    return ComplaintDTO.model_validate(res)
+
+
+@router.post("/close-complaint")
+async def close_complaint(id: int, session: AsyncSession = Depends(get_session_with_commit)):
+    await ComplaintsDAO(session=session).update(ComplaintUpdateFilter(id=id), ComplaintUpdateValue(status='closed'))
+    return {"status": "ok"}
