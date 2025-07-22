@@ -15,9 +15,15 @@ class ComplaintPost(BaseModel):
     text: str
 
 
-class ComplaintCreate(ComplaintBaseResponse):
+class ComplaintCreate(ComplaintBaseResponse, ComplaintPost):
     category: str = "другое"
 
+
+class ComplaintUpdateFilter(BaseModel):
+    id: int
+
+class ComplaintUpdateValue(BaseModel):
+    category: str
 
 class ComplaintDTO(ComplaintCreate):
     id: int
