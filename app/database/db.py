@@ -27,3 +27,8 @@ class Base(AsyncAttrs, DeclarativeBase):
     @declared_attr
     def __tablename__(self) -> str:
         return self.__name__.lower() + "s"
+
+
+async def create_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)

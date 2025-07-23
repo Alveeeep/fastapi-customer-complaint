@@ -1,5 +1,15 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from app.routers.complaints import router as complaints_router
+from app.database.db import create_tables
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await create_tables()
+    print("База готова к работе")
+    yield
+    print("Приложение завершает работу (данные сохранены)")
 
 
 app = FastAPI()
