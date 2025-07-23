@@ -20,8 +20,7 @@ WORKDIR /app
 
 USER app
 
-RUN mkdir -p sqlite_data
-RUN chown -R app:app sqlite_data
+RUN mkdir -p sqlite_data && chown -R app:app sqlite_data
 
 EXPOSE 8000
 
