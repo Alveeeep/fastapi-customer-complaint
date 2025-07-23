@@ -1,5 +1,5 @@
 ## Настройка n8n
-- Изменить создать .env файл в папке n8n-compose
+- Создать .env файл в папке n8n-compose
 ```
 # DOMAIN_NAME and SUBDOMAIN together determine where n8n will be reachable from
 # The top level domain to serve from
