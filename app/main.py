@@ -12,5 +12,5 @@ async def lifespan(app: FastAPI):
     print("Приложение завершает работу (данные сохранены)")
 
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 app.include_router(complaints_router)
