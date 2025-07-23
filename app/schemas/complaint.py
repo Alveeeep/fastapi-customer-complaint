@@ -6,6 +6,8 @@ class ComplaintBaseResponse(BaseModel):
     status: str = 'open'
     sentiment: str
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class ComplaintFullResponse(ComplaintBaseResponse):
     category: str
