@@ -7,12 +7,11 @@ from app.database.db import create_tables
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print(settings.BASE_DIR)
     await create_tables()
     print("База готова к работе")
     yield
     print("Приложение завершает работу (данные сохранены)")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.include_router(complaints_router)
