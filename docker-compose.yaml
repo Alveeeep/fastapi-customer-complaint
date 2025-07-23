@@ -7,3 +7,4 @@ services:
     volumes:
       - .:/app
       - ./sqlite_data:/app/sqlite_data
+    user: "app"
