@@ -8,8 +8,8 @@ RUN uv sync --locked
 
 RUN useradd -m -u 1001 app && \
     mkdir -p /home/app/.cache/uv && \
-    mkdir -p /app/sqlite_data && \
     chown -R app:app /home/app && \
+    mkdir -p /app/sqlite_data && \
     chown -R app:app /app/sqlite_data
 
 ENV PYTHONUNBUFFERED=1 \
