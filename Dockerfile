@@ -8,7 +8,7 @@ RUN uv sync --locked
 
 RUN useradd -m -u 1001 app && \
     mkdir -p /home/app/.cache/uv && \
-    chown -R app:app /home/app &&
+    chown -R app:app /home/app
 
 ENV PYTHONUNBUFFERED=1 \
     UV_CACHE_DIR=/home/app/.cache/uv \
