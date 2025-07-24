@@ -6,7 +6,7 @@ COPY --chown=app:app pyproject.toml uv.lock ./
 RUN uv venv
 RUN uv sync --locked
 
-RUN groupadd -r appgroup && useradd -r -g appgroup app
+RUN groupadd -r appgroup && useradd -r -g appgroup app && \
     mkdir -p /home/app/.cache/uv && \
     chown -R app:appgroup /home/app
 
