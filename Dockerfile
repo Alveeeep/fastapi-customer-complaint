@@ -6,21 +6,23 @@ COPY --chown=app:app pyproject.toml uv.lock ./
 RUN uv venv
 RUN uv sync --locked
 
-RUN useradd -m -u 1001 app && \
+RUN groupadd -r appgroup && useradd -r -g appgroup app
     mkdir -p /home/app/.cache/uv && \
-    chown -R app:app /home/app
+    chown -R app:appgroup /home/app
+
+RUN mkdir -p sqlite_data && chown -R app:appgroup sqlite_data
+
+VOLUME /app/sqlite_data
 
 ENV PYTHONUNBUFFERED=1 \
     UV_CACHE_DIR=/home/app/.cache/uv \
     PATH="/home/app/.local/bin:${PATH}"
 
-COPY --chown=app:app . /app
+COPY --chown=app:appgroup . /app
 
 WORKDIR /app
 
 USER app
-
-RUN mkdir -p sqlite_data && chown -R app:app sqlite_data
 
 EXPOSE 8000
 
