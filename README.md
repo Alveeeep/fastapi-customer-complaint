@@ -1,3 +1,8 @@
+## Для ChatGPT:
+
+- В файле utils/ai_api.py убрать строчку base_url, если используется ключ напрямую от OpenAi
+- В .env файл добавить OPENAI_TOKEN= ваш ключ
+
 ## Настройка n8n
 - Создать .env файл в папке n8n-compose
 ```
@@ -17,7 +22,7 @@ GENERIC_TIMEZONE=Europe/Berlin
 # The email address to use for the TLS/SSL certificate creation
 SSL_EMAIL=user@example.com
 ```
-- Создать директорию на сервере или локальном компьютере
+- Создать директорию на сервере или локальном компьютере в папке n8n-compose
 ```shell
 mkdir local-files
 ```
