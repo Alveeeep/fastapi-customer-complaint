@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dao.dao import ComplaintsDAO
 from app.utils.external_api import analyze_sentiment
@@ -33,13 +33,15 @@ async def create_appointment(
 @router.get("/complaint-full-info/{id}", response_model=ComplaintDTO)
 async def get_full_info_complaint(id: int, session: AsyncSession = Depends(get_session_with_commit)):
     res = await ComplaintsDAO(session=session).find_one_or_none_by_id(id)
+    if res is None:
+        raise HTTPException(status_code=500, detail="Complaint not found")
     return ComplaintDTO.model_validate(res)
 
 
 @router.get("/complaint-open-last-hour", response_model=ComplaintDTO)
 async def get_complaint_open_last_hour(session: AsyncSession = Depends(get_session_with_commit)):
     res = await ComplaintsDAO(session=session).find_last_hour_open()
-    return ComplaintDTO.model_validate(res)
+    return [ComplaintDTO.model_validate(el) for el in res]
 
 
 @router.post("/close-complaint")

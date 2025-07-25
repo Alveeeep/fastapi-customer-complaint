@@ -33,5 +33,3 @@ class ComplaintUpdateValue(BaseModel):
 class ComplaintDTO(ComplaintCreate):
     id: int
     timestamp: datetime
-
-    model_config = ConfigDict(from_attributes=True)
