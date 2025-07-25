@@ -2,6 +2,7 @@ import aiohttp
 import json
 from app.config import settings
 from fastapi import HTTPException, status
+from loguru import logger
 
 
 async def analyze_sentiment(text: str) -> str:
@@ -16,5 +17,6 @@ async def analyze_sentiment(text: str) -> str:
                 sentiment = result_json.get("sentiment", "unknown")
                 return sentiment
             except Exception as e:
+                logger.error(f"Sentiment не смог обработать: {e}")
                 raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                                      detail=f"Unexpected error: {str(e)}")

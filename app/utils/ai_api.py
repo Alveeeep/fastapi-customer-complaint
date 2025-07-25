@@ -1,5 +1,6 @@
 from openai import AsyncOpenAI
 from app.config import settings
+from loguru import logger
 
 
 async def get_chatgpt_response(text: str) -> str:
@@ -20,5 +21,5 @@ async def get_chatgpt_response(text: str) -> str:
             )
             return chat_completion.choices[0].message.content
         except Exception as e:
-            # логирование об ошибке
+            logger.error(f"ChatGPT не смог обработать: {e}")
             return 'другое'
