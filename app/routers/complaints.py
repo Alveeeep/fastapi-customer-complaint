@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dao.dao import ComplaintsDAO
 from app.utils.external_api import analyze_sentiment
 from app.utils.ai_api import get_chatgpt_response
-from typing import Union
+from typing import Union, List
 from app.dependencies.dao_dep import (
     get_session_with_commit,
 )
@@ -38,7 +38,7 @@ async def get_full_info_complaint(id: int, session: AsyncSession = Depends(get_s
     return ComplaintDTO.model_validate(res)
 
 
-@router.get("/complaint-open-last-hour", response_model=ComplaintDTO)
+@router.get("/complaint-open-last-hour", response_model=List[ComplaintDTO])
 async def get_complaint_open_last_hour(session: AsyncSession = Depends(get_session_with_commit)):
     res = await ComplaintsDAO(session=session).find_last_hour_open()
     return [ComplaintDTO.model_validate(el) for el in res]
