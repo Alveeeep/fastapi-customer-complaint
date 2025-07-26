@@ -10,4 +10,4 @@ services:
     user: "1000:1000"
     restart: unless-stopped
     environment:
-      - UMASK=0002
+      - UMASK=002

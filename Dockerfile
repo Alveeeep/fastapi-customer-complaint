@@ -13,21 +13,19 @@ RUN uv sync --locked
 
 RUN mkdir -p /app/database/data /app/logs && \
     chown -R 1000:1000 /app && \
-    chmod -R 775 /app/database /app/logs
+    chmod -R 775 /app && \
+    touch /app/logs/bot.log /app/database/data/clients.db && \
+    chmod 664 /app/logs/bot.log /app/database/data/clients.db
 
 ENV PYTHONUNBUFFERED=1 \
     UV_CACHE_DIR=/home/app/.cache/uv \
-    PATH="/home/app/.local/bin:${PATH}"
+    PATH="/home/app/.local/bin:${PATH}" \
+    LOG_DIR=/app/logs
 
 COPY --chown=1000:1000 . /app
 
 WORKDIR /app
-
-RUN touch /app/logs/bot.log /app/database/data/clients.db && \
-    chmod 664 /app/logs/bot.log /app/database/data/clients.db
-
 USER 1000:1000
 
 EXPOSE 8000
-
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
