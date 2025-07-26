@@ -5,17 +5,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - sqlite_data:/app/database/data
-      - logs_volume:/app/logs
+      - ./database:/app/database/data
+      - ./logs:/app/logs
     user: "1000:1000"
     restart: unless-stopped
-
-volumes:
-  sqlite_data:
-    driver: local
-    driver_opts:
-      o: uid=1000,gid=1000
-      type: none
-      device: /app/database/data
-  logs_volume:
-    driver: local
+    environment:
+      - UMASK=0002

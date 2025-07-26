@@ -8,32 +8,25 @@ RUN groupadd -g 1000 appgroup && \
     chown -R 1000:1000 /home/app
 
 COPY --chown=1000:1000 pyproject.toml uv.lock ./
-
 RUN uv venv
 RUN uv sync --locked
 
-RUN mkdir -p /app/database/data && \
-    mkdir -p /app/logs && \
+RUN mkdir -p /app/database/data /app/logs && \
     chown -R 1000:1000 /app && \
-    chmod -R 775 /app/logs
+    chmod -R 775 /app/database /app/logs
 
 ENV PYTHONUNBUFFERED=1 \
     UV_CACHE_DIR=/home/app/.cache/uv \
-    PATH="/home/app/.local/bin:${PATH}" \
-    LOG_DIR=/app/logs
+    PATH="/home/app/.local/bin:${PATH}"
 
 COPY --chown=1000:1000 . /app
 
 WORKDIR /app
 
+RUN touch /app/logs/bot.log /app/database/data/clients.db && \
+    chmod 664 /app/logs/bot.log /app/database/data/clients.db
+
 USER 1000:1000
-
-RUN touch /app/logs/bot.log && chmod 664 /app/logs/bot.log
-
-RUN touch /app/database/data/clients.db && \
-    chown -R 1000:1000 /app/database/data && \
-    chmod 775 /app/database && \
-    chmod g+s /app/database/data/clients.db
 
 EXPOSE 8000
 
