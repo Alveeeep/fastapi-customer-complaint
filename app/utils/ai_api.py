@@ -19,6 +19,7 @@ async def get_chatgpt_response(text: str) -> str:
                 ],
                 model="gpt-3.5-turbo",
             )
+            logger.info(f"Ответ от ChatGPT - {chat_completion.choices[0].message.content}")
             return chat_completion.choices[0].message.content
         except Exception as e:
             logger.error(f"ChatGPT не смог обработать: {e}")
