@@ -10,13 +10,13 @@ RUN groupadd -r appgroup && useradd -r -g appgroup app && \
     mkdir -p /home/app/.cache/uv && \
     chown -R app:appgroup /home/app
 
-RUN mkdir -p sqlite_data && chown -R app:appgroup sqlite_data
-
-VOLUME /app/sqlite_data
+RUN mkdir -p /app/database/data && \
+    mkdir -p /app/logs && \
+    chown -R app:appgroup /app
 
 ENV PYTHONUNBUFFERED=1 \
     UV_CACHE_DIR=/home/app/.cache/uv \
-    PATH="/home/app/.local/bin:${PATH}"
+    PATH="/home/app/.local/bin:${PATH}" \
 
 COPY --chown=app:appgroup . /app
 

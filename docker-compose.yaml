@@ -5,9 +5,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
-      - sqlite_data:/app/sqlite_data
+      - sqlite_data:/app/database/data
+      - ./logs:/app/logs
     user: "app"
+    restart: unless-stopped
 
 volumes:
   sqlite_data:
