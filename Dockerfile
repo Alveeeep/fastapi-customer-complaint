@@ -12,6 +12,7 @@ RUN groupadd -r appgroup && useradd -r -g appgroup app && \
 
 RUN mkdir -p /app/database/data && \
     mkdir -p /app/logs && \
+    chown -R app:appgroup /app/logs && \
     chown -R app:appgroup /app
 
 ENV PYTHONUNBUFFERED=1 \
