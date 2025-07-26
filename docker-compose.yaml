@@ -13,5 +13,9 @@ services:
 volumes:
   sqlite_data:
     driver: local
+    driver_opts:
+      o: uid=1000,gid=1000
+      type: none
+      device: /app/database/data
   logs_volume:
     driver: local

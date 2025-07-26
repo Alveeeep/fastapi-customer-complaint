@@ -32,7 +32,8 @@ RUN touch /app/logs/bot.log && chmod 664 /app/logs/bot.log
 
 RUN touch /app/database/data/clients.db && \
     chown -R 1000:1000 /app/database/data && \
-    chmod 664 /app/database/data/clients.db
+    chmod 775 /app/database && \
+    chmod g+s /app/database/data/clients.db
 
 EXPOSE 8000
 
