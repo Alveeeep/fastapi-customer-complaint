@@ -16,7 +16,7 @@ RUN mkdir -p /app/database/data && \
 
 ENV PYTHONUNBUFFERED=1 \
     UV_CACHE_DIR=/home/app/.cache/uv \
-    PATH="/home/app/.local/bin:${PATH}" \
+    PATH="/home/app/.local/bin:${PATH}"
 
 COPY --chown=app:appgroup . /app
 
