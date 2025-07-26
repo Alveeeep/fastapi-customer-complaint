@@ -6,13 +6,12 @@ services:
       - "8000:8000"
     volumes:
       - sqlite_data:/app/database/data
-      - ./logs:/app/logs
+      - logs_volume:/app/logs
     user: "1000:1000"
     restart: unless-stopped
-    environment:
-      - PYTHONUNBUFFERED=1
-      - UMASK=0002
 
 volumes:
   sqlite_data:
+    driver: local
+  logs_volume:
     driver: local
