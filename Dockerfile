@@ -30,6 +30,10 @@ USER 1000:1000
 
 RUN touch /app/logs/bot.log && chmod 664 /app/logs/bot.log
 
+RUN touch /app/database/data/clients.db && \
+    chown -R 1000:1000 /app/database/data && \
+    chmod 664 /app/database/data/clients.db
+
 EXPOSE 8000
 
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
