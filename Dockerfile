@@ -2,7 +2,7 @@ FROM python:3.13-slim AS base
 
 FROM base AS builder
 
-COPY --from=ghcr.io/astral-sh/uv:0.4.9 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 RUN useradd -m -u 1001 app && \
