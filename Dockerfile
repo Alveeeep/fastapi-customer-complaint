@@ -6,7 +6,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 RUN useradd -m -u 1001 app && \
-    mkdir -p /app/{sqlite_data,logs} && \
+    mkdir -p /app/sqlite_data && \
+    mkdir -p /app/logs && \
     chmod -R 777 /app/logs && \
     chown -R app:app /app
 
@@ -26,7 +27,8 @@ RUN --mount=type=cache,target=/home/app/.cache/uv \
 FROM base
 
 RUN useradd -m -u 1001 app && \
-    mkdir -p /app/{sqlite_data,logs} && \
+    mkdir -p /app/sqlite_data && \
+    mkdir -p /app/logs && \
     chmod -R 777 /app/logs && \
     chown -R app:app /app
 
