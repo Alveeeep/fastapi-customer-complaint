@@ -7,6 +7,7 @@ ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 RUN useradd -m -u 1001 app && \
     mkdir -p /app/{sqlite_data,logs} && \
+    chmod -R 777 /app/logs && \
     chown -R app:app /app
 
 WORKDIR /app
@@ -26,6 +27,7 @@ FROM base
 
 RUN useradd -m -u 1001 app && \
     mkdir -p /app/{sqlite_data,logs} && \
+    chmod -R 777 /app/logs && \
     chown -R app:app /app
 
 WORKDIR /app
