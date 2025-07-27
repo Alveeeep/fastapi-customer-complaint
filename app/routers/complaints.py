@@ -25,7 +25,7 @@ async def create_appointment(
     if category != 'другое':
         await ComplaintsDAO(session=session).update(ComplaintUpdateFilter(id=added_complaint.id),
                                                     ComplaintUpdateValue(category=category))
-        added_complaint = ComplaintsDAO(session=session).find_one_or_none_by_id(added_complaint.id)
+        added_complaint = await ComplaintsDAO(session=session).find_one_or_none_by_id(added_complaint.id)
         return ComplaintFullResponse.model_validate(added_complaint)
     else:
         return ComplaintBaseResponse.model_validate(added_complaint)
