@@ -1,31 +1,43 @@
-FROM python:3.13-slim
+FROM python:3.13-slim AS base
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+FROM base AS builder
 
-RUN groupadd -g 1000 appgroup && \
-    useradd -u 1000 -g appgroup -d /home/app app && \
-    mkdir -p /home/app/.cache/uv && \
-    chown -R 1000:1000 /home/app
+COPY --from=ghcr.io/astral-sh/uv:0.4.9 /uv /bin/uv
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
-COPY --chown=1000:1000 pyproject.toml uv.lock ./
-RUN uv venv
-RUN uv sync --locked
-
-RUN mkdir -p /app/database/data /app/logs && \
-    chown -R 1000:1000 /app && \
-    chmod -R 775 /app && \
-    touch /app/logs/bot.log /app/database/data/clients.db && \
-    chmod 664 /app/logs/bot.log /app/database/data/clients.db
-
-ENV PYTHONUNBUFFERED=1 \
-    UV_CACHE_DIR=/home/app/.cache/uv \
-    PATH="/home/app/.local/bin:${PATH}" \
-    LOG_DIR=/app/logs
-
-COPY --chown=1000:1000 . /app
+RUN useradd -m -u 1001 app && \
+    mkdir -p /app/{sqlite_data,logs} && \
+    chown -R app:app /app
 
 WORKDIR /app
-USER 1000:1000
+
+COPY --chown=app:app pyproject.toml uv.lock ./
+
+RUN --mount=type=cache,target=/home/app/.cache/uv \
+    uv venv && \
+    uv sync --frozen --no-install-project --no-dev
+
+COPY --chown=app:app . .
+
+RUN --mount=type=cache,target=/home/app/.cache/uv \
+    uv sync --frozen --no-dev
+
+FROM base
+
+RUN useradd -m -u 1001 app && \
+    mkdir -p /app/{sqlite_data,logs} && \
+    chown -R app:app /app
+
+WORKDIR /app
+
+COPY --from=builder --chown=app:app /app /app
+
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1 \
+    LOG_DIR="/app/logs"
+
+USER app
 
 EXPOSE 8000
-CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

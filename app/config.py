@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     # Тут токены для api внешних
     SENTIMENT_TOKEN: SecretStr
     OPENAI_TOKEN: SecretStr
-    SQLITE_DB_PATH: str = f"sqlite+aiosqlite:///{BASE_DIR}/database/data/clients.db"
+    SQLITE_DB_PATH: str = f"sqlite+aiosqlite:///{BASE_DIR}/sqlite_data/clients.db"
 
     @property
     def DB_URL(self) -> str:

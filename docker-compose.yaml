@@ -5,9 +5,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./database:/app/database/data
-      - ./logs:/app/logs
-    user: "1000:1000"
+      - sqlite_data:/app/sqlite_data
+      - logs:/app/logs
+    user: "app"
     restart: unless-stopped
-    environment:
-      - UMASK=002
+
+volumes:
+  sqlite_data:
+  logs:
